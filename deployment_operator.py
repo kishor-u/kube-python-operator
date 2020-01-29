@@ -35,7 +35,7 @@ def main():
         for i in range(len(deployment_update_status.status.conditions)):
             print("Deployment", deployment.metadata.name,
                   "Status : ", deployment_update_status.status.conditions[i].message)
-        print("Deployment updated------->>>>>")
+        print("Deployment updated------->>>>>\n")
 
     # API to fetch current deployments
     try:

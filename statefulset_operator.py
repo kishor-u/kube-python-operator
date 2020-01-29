@@ -34,7 +34,7 @@ def main():
                                                 body=statefulset)
         print("Statefulset", statefulset.metadata.name,
               "updated to revision :", statefulset_update_status.status.update_revision)
-        print("Statefulset updated------->>>>>")
+        print("Statefulset updated------->>>>>\n")
 
     # API to fetch current statefulset
     try:
