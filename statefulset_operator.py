@@ -14,6 +14,7 @@ from conf.config import Const
 from kubernetes import config, client
 from kubernetes.client.rest import ApiException
 
+
 def main():
     # Module will load kube config from '~/.kube/config'.
     config.load_kube_config()  # use config.load_incluster_config() to load a Kubernetes config from within a cluster.
@@ -25,7 +26,6 @@ def main():
     namespace = Const.NAMESPACE
     pretty = Const.PRETTY
 
-
     # API to update the cpu and memory of statefulset object.
     def update_statefulset(kube_api_instance, statefulset):
         statefulset_update_status = kube_api_instance.patch_namespaced_stateful_set(
@@ -33,9 +33,8 @@ def main():
                                                 namespace=namespace,
                                                 body=statefulset)
         print("Statefulset", statefulset.metadata.name,
-            "updated to revision :", statefulset_update_status.status.update_revision)
+              "updated to revision :", statefulset_update_status.status.update_revision)
         print("Statefulset updated------->>>>>")
-
 
     # API to fetch current statefulset
     try:
@@ -65,7 +64,7 @@ def main():
 
                     if(Const.REQUEST_BODY['cpu'] == ''): Const.REQUEST_BODY['cpu'] = Const.CPU
                     if(Const.REQUEST_BODY['memory'] == ''): Const.REQUEST_BODY['memory'] = Const.MEMORY
-                    
+
                 # Handles limits parameters here
                 if(curr_container_limit is None):
                     Const.LIMIT_BODY['cpu'] = Const.CPUS_LIMIT
@@ -85,6 +84,7 @@ def main():
 
     except ApiException as e:
         print("Exception on API call : [listing stateful set] %s\n" % e)
+
 
 if __name__ == '__main__':
     main()

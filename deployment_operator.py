@@ -14,9 +14,10 @@ from conf.config import Const
 from kubernetes import config, client
 from kubernetes.client.rest import ApiException
 
+
 def main():
     # Module will load kube config from '~/.kube/config'.
-    config.load_kube_config() # use config.load_incluster_config() to load a Kubernetes config from within a cluster.
+    config.load_kube_config()  # use config.load_incluster_config() to load a Kubernetes config from within a cluster.
 
     # Create an instance of the API class.
     kube_api_instance = client.AppsV1Api()
@@ -25,7 +26,6 @@ def main():
     namespace = Const.NAMESPACE
     pretty = Const.PRETTY
 
-
     # API to update the cpu and memory of deployment object.
     def update_deployment(kube_api_instance, deployment):
         deployment_update_status = kube_api_instance.patch_namespaced_deployment(
@@ -33,10 +33,9 @@ def main():
                                                 namespace=namespace,
                                                 body=deployment)
         for i in range(len(deployment_update_status.status.conditions)):
-            print("Deployment", deployment.metadata.name, 
-                "Status : ", deployment_update_status.status.conditions[i].message)    
+            print("Deployment", deployment.metadata.name,
+                  "Status : ", deployment_update_status.status.conditions[i].message)
         print("Deployment updated------->>>>>")
-
 
     # API to fetch current deployments
     try:
@@ -66,7 +65,7 @@ def main():
 
                     if(Const.REQUEST_BODY['cpu'] == ''): Const.REQUEST_BODY['cpu'] = Const.CPU
                     if(Const.REQUEST_BODY['memory'] == ''): Const.REQUEST_BODY['memory'] = Const.MEMORY
-                
+
                 # Handles limits parameters here
                 if(curr_container_limit is None):
                     Const.LIMIT_BODY['cpu'] = Const.CPUS_LIMIT
@@ -79,13 +78,14 @@ def main():
                     if(Const.LIMIT_BODY['cpu'] == ''): Const.LIMIT_BODY['cpu'] = Const.CPUS_LIMIT
                     if(Const.LIMIT_BODY['memory'] == ''): Const.LIMIT_BODY['memory'] = Const.MEM_LIMIT
 
-                ## Call API to update deployments not having CPU and Memory specified
+                # Call API to update deployments not having CPU and Memory specified
                 curr_deployment_obj.spec.template.spec.containers[j].resources.requests = Const.REQUEST_BODY
                 curr_deployment_obj.spec.template.spec.containers[j].resources.limits = Const.LIMIT_BODY
                 update_deployment(kube_api_instance, curr_deployment_obj)
 
     except ApiException as e:
         print("Exception on API call : [listing deployments] %s\n" % e)
+
 
 if __name__ == '__main__':
     main()
