@@ -1,0 +1,15 @@
+# Sample k8s cronjob that can configure to fetch all deployments/statefulset to limit the cpu and memory resources.
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: deployment-operator-cron
+spec:
+  schedule: "10 12 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: deployment-operator
+            image: <registry>:<name:tag>
+          restartPolicy: OnFailure
