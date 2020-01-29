@@ -50,9 +50,13 @@ def main():
 
             # For every deployment added we get multiple MODIFIED notifications.
             # Hence we will store those deployments in the timeframe and call update when it ends.
+            # Skip ADDED events because it may contain existing deployments.
             if(event['type'] == 'MODIFIED'):
                 if event['object'].metadata.name not in deployments:
                     deployments.append(event['object'].metadata.name)
+            if(event['type'] == 'DELETED'):
+                if event['object'].metadata.name in deployments:
+                    deployments.remove(event['object'].metadata.name)
             count -= 1
             if not count: w.stop()
         print("Finished watching deployment stream ---->>")
